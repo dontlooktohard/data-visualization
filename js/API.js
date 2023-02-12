@@ -1,14 +1,14 @@
 // ------>Catching all the selectors in the page<--
 const setContinent = document.querySelector('.continent');
 const setCity = document.querySelector('.city');
-const ctx = document.getElementById("myChart").getContext("2d");
+const ctx = document.getElementById("myChart")
 const africaBtn = document.querySelector('.africa')
 const americaBtn = document.querySelector('.america')
 const asiaBtn = document.querySelector('.asia')
 const europeBtn = document.querySelector('.europe')
 const oceaniaBtn = document.querySelector('.oceania')
 const chartBox = document.querySelector("#chartBox");
-const spinner = chartBox.querySelector(".spinner");
+const spinner = document.querySelector(".spinner");
 
 // ------->API fetch the populations and names of regions<--
 
@@ -21,7 +21,7 @@ async function getCountriesByRegion(region) {
     try {
         const response = await fetch(`https://restcountries.com/v2/region/${region}`);
         if (!response.ok) throw Error("ERROR!!");
-        const data = await response.json();
+        let data = await response.json();
         console.log(data);
         
          countryNames = [];
@@ -103,22 +103,37 @@ function initChart(countryNames, countryPopulations) {
 // ---------------------> second API fetching each country <-----------------
 // https://documenter.getpostman.com/view/1134062/T1LJjU52/
 
-try {
-    const response = await fetch('https://countriesnow.space/api/v0.1/countries/population', {
-        method: 'POST',
+let citiesNames = [];
+let citiesPopulations = [];
+async function getCityByCountries(country) {
+  try {
+    const response = await fetch("https://countriesnow.space/api/v0.1/countries/population/cities/filter",
+      {
+        method: "POST",
         headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ "country": `${country}` })
-    })
-
-    if(!response.ok) {
-        throw new Error(response.status)
+        body: JSON.stringify({ "country": `${country}` }),
+      }
+    );
+  
+    let data = await response.json();
+    citiesNames = [];
+    citiesPopulations = [];
+    if (!response.ok) {
+      myChart.destroy();
+      throw Error("ERROR!!");
     }
-    const populationData = await response.json()
-
-
+    data.forEach((city) => {
+        citiesNames.push(city.name);
+        citiesPopulations.push(city.population);
+      });
+      initChart(citiesNames , citiesPopulations);
+    } catch (error) {
+        console.log("error");
+    }
+}
 
 
 
