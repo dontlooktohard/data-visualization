@@ -10,6 +10,7 @@ body {
     justify-content: center;
     height: 100vh;
     font-family: Arial, sans-serif;
+    background-color: black;
 }
 
 #container {
@@ -19,7 +20,9 @@ body {
     box-shadow: 0px 0px 10px 0px #cccccc;
     border-radius: 10px;
     text-align: center;
-    background-color: lightslategray;
+    background-image: url('../assets/istockphoto-1284041267-612x612.jpg');;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 header {

@@ -1,6 +1,5 @@
 // ------>Catching all the selectors in the page<--
-const setContinent = document.querySelector('.continent');
-const setCity = document.querySelector('.city');
+// const setCity = document.querySelector('.city');
 const ctx = document.getElementById("myChart")
 const africaBtn = document.querySelector('#africa')
 const americaBtn = document.querySelector('#america')
@@ -11,14 +10,20 @@ const chartBox = document.querySelector("#chartBox");
 const spinner = document.querySelector(".spinner");
 const toggleChartTypeBtn = document.getElementById("toggle-chart-type");
 
+
+let myChart;
+
 africaBtn.addEventListener("click", function() {
-    africaBtn.disabled = true;
-    getCountriesByRegion("africa").finally(function() {
-        africaBtn.disabled = false;
-    });
+    if (myChart) {
+        myChart.destroy();
+      }
+    getCountriesByRegion("africa")
 });
 
 americaBtn.addEventListener("click", function() {
+    if (myChart) {
+        myChart.destroy();
+      }
     americaBtn.disabled = true;
     getCountriesByRegion("americas").finally(function() {
         americaBtn.disabled = false;
@@ -26,6 +31,9 @@ americaBtn.addEventListener("click", function() {
 });
 
 asiaBtn.addEventListener("click", function() {
+    if (myChart) {
+        myChart.destroy();
+      }
     asiaBtn.disabled = true;
     getCountriesByRegion("asia").finally(function() {
         asiaBtn.disabled = false;
@@ -33,6 +41,9 @@ asiaBtn.addEventListener("click", function() {
 });
 
 europeBtn.addEventListener("click", function() {
+    if (myChart) {
+        myChart.destroy();
+      }
     europeBtn.disabled = true;
     getCountriesByRegion("europe").finally(function() {
         europeBtn.disabled = false;
@@ -40,6 +51,9 @@ europeBtn.addEventListener("click", function() {
 });
 
 oceaniaBtn.addEventListener("click", function() {
+    if (myChart) {
+        myChart.destroy();
+      }
     oceaniaBtn.disabled = true;
     getCountriesByRegion("oceania").finally(function() {
         oceaniaBtn.disabled = false;
@@ -72,13 +86,12 @@ async function getCountriesByRegion(region) {
         console.log(countryNames); 
         console.log(countryPopulations);
         createCountryBtn(data);
-        initChart(countryNames, countryPopulations);
-        
         spinner.style.display = "none";
     } catch (error) {
         console.log(`An error occurred while fetching the data: ${error}`);
         spinner.style.display = "none";
     }
+    
 }
 
 
@@ -112,11 +125,8 @@ const addEventListenersToCountryBtn = () => {
 // ----------->chart function of create and destroy  <--------------------------------------------
 
     function initChart(countryNames, countryPopulations) {
-
-        if (myChart !== null) {
-            myChart.destroy();
-          }
-    
+      console.log(countryNames); 
+      console.log(countryPopulations);
           myChart = new Chart(ctx, {
             type: "line",
             data: {
