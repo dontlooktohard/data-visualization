@@ -1,2 +1,2 @@
 # data-visualization
-visionary-tarsier-d5738e
+https://visionary-tarsier-d5738e.netlify.app
