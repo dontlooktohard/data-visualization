@@ -1,198 +1,176 @@
 // ------>Catching all the selectors in the page<--
 // const setCity = document.querySelector('.city');
-const ctx = document.getElementById("myChart")
-const africaBtn = document.querySelector('#africa')
-const americaBtn = document.querySelector('#america')
-const asiaBtn = document.querySelector('#asia')
-const europeBtn = document.querySelector('#europe')
-const oceaniaBtn = document.querySelector('#oceania')
+const ctx = document.querySelector("#chartBox canvas.myChart");
+const continentsUi = document.querySelector(".continent");
+
 const chartBox = document.querySelector("#chartBox");
 const spinner = document.querySelector(".spinner");
 const toggleChartTypeBtn = document.getElementById("toggle-chart-type");
-
-
-let myChart;
-
-africaBtn.addEventListener("click", function() {
-    if (myChart) {
-        myChart.destroy();
-      }
-    getCountriesByRegion("africa")
-});
-
-americaBtn.addEventListener("click", function() {
-    if (myChart) {
-        myChart.destroy();
-      }
-    americaBtn.disabled = true;
-    getCountriesByRegion("americas").finally(function() {
-        americaBtn.disabled = false;
-    });
-});
-
-asiaBtn.addEventListener("click", function() {
-    if (myChart) {
-        myChart.destroy();
-      }
-    asiaBtn.disabled = true;
-    getCountriesByRegion("asia").finally(function() {
-        asiaBtn.disabled = false;
-    });
-});
-
-europeBtn.addEventListener("click", function() {
-    if (myChart) {
-        myChart.destroy();
-      }
-    europeBtn.disabled = true;
-    getCountriesByRegion("europe").finally(function() {
-        europeBtn.disabled = false;
-    });
-});
-
-oceaniaBtn.addEventListener("click", function() {
-    if (myChart) {
-        myChart.destroy();
-      }
-    oceaniaBtn.disabled = true;
-    getCountriesByRegion("oceania").finally(function() {
-        oceaniaBtn.disabled = false;
-    });
-});
-
+let myChart = null;
 spinner.style.display = "none";
+
+function activateContinentsButtons() {
+  continentsUi.addEventListener("click", (e) => {
+    if (e.target.tagName !== "BUTTON" && e.target.tagName !== "I") return;
+    let target = e.target;
+    if (e.target.tagName === "I") target = e.target.parentElement;
+    getCountriesByRegion(target.dataset.continent);
+    //  initChart(continentNames,continentPopulations);
+  });
+}
+
+// MOSHE =================================
+async function getAllContinents() {
+  try {
+    const res = await fetch("https://restcountries.com/v3.1/all");
+    if (!res.ok) throw new Error("someone needs to sleep");
+    const data = await res.json();
+    return Array.from(
+      data.reduce(
+        (continents, country) => continents.add(country.continents.join("")),
+        new Set()
+      )
+    );
+  } catch (err) {
+    console.log(err);
+    return 0;
+  }
+}
+async function showContinentsUi() {
+  const continentsNames = await getAllContinents();
+  //console.log(continentsNames);
+  continentsNames.forEach((continentName) => {
+    const newEl = document.createElement("button");
+    newEl.innerHTML = '<i class="fa-solid fa-earth-africa fa-4x"></i><br>';
+    newEl.innerHTML += continentName;
+    newEl.className = `continent ${continentName
+      .toLowerCase()
+      .replace(" ", "-")}`;
+    newEl.setAttribute("data-continent", continentName);
+    //console.log(newEl);
+    continentsUi.appendChild(newEl);
+  });
+  activateContinentsButtons();
+}
+
+showContinentsUi();
+//===================
 
 // ------->API fetch the populations and names of regions<--
 
 let countryNames = [];
 let countryPopulations = [];
 
-
 async function getCountriesByRegion(region) {
-    spinner.style.display = "block";
-    try {
-        const response = await fetch(`https://restcountries.com/v2/region/${region}`);
-        if (!response.ok) throw Error("ERROR!!");
-        let data = await response.json();
-        console.log(data);
-        
-         countryNames = [];
-         countryPopulations = [];
-         
-         data.forEach((country) => {
-            countryNames.push(country.name);
-            countryPopulations.push(country.population);
-          });
-        console.log(countryNames); 
-        console.log(countryPopulations);
-        createCountryBtn(data);
-        spinner.style.display = "none";
-    } catch (error) {
-        console.log(`An error occurred while fetching the data: ${error}`);
-        spinner.style.display = "none";
-    }
-    
+  spinner.style.display = "block";
+  try {
+    const response = await fetch(
+      `https://restcountries.com/v3.1/region/${region}`
+    );
+    if (!response.ok) throw Error("ERROR!!");
+    let data = await response.json();
+    data = data.sort((c1, c2) => c1.population - c2.population);
+    console.log(data);
+
+    countryNames = [];
+    countryPopulations = [];
+
+    data.forEach((country) => {
+      countryNames.push(country.name.official);
+      countryPopulations.push(country.population);
+    });
+
+    console.log(countryNames);
+    console.log(countryPopulations);
+    createCountryBtn(countryNames);
+    spinner.style.display = "none";
+    myChart = initChart(
+      countryNames.slice(1, 15),
+      countryPopulations.slice(1, 15)
+    );
+  } catch (error) {
+    console.log(`An error occurred while fetching the data: ${error}`);
+    spinner.style.display = "none";
+  }
 }
 
-
-const countryButtons = document.createElement('div');
-countryButtons.classList.add("country-btn");
+const countryButtons = document.createElement("div");
+countryButtons.classList.add("country-container");
 chartBox.append(countryButtons);
 
 // ------------------> create btn and attach them to EventListener <------------------------
 
-const createCountryBtn = (data) => {
-    countryButtons.innerHTML = null
-    data.forEach(country => {
-        const button = document.createElement('button')
-        button.classList.add("country-btn")
-        button.innerText = country.name
-        countryButtons.append(button)
-    })
-    addEventListenersToCountryBtn();
-}
-
+const createCountryBtn = (countryNames) => {
+  countryButtons.innerHTML = null;
+  countryNames.forEach((name) => {
+    const button = document.createElement("button");
+    button.setAttribute("data-country-name", name);
+    button.innerText = name;
+    countryButtons.append(button);
+  });
+  addEventListenersToCountryBtn();
+};
 
 const addEventListenersToCountryBtn = () => {
-    const countryBtn = document.querySelectorAll(".country-btn");
-    countryBtn.forEach((btn, index) => {
-        btn.addEventListener("click", () => {
-            initChart(countryNames[index], countryPopulations[index]);
-        });
-    });
-}
-
-// ----------->chart function of create and destroy  <--------------------------------------------
-
-    function initChart(countryNames, countryPopulations) {
-      console.log(countryNames); 
-      console.log(countryPopulations);
-          myChart = new Chart(ctx, {
-            type: "line",
-            data: {
-              labels: countryNames,
-              datasets: [{
-                label: "Population",
-                data: countryPopulations,
-                backgroundColor: "rgba(255, 99, 132, 0.2)",
-                borderColor: "rgba(255, 99, 132, 1)",
-                borderWidth: 1
-              }]
-            },
-            options: {
-              scales: {           
-                yAxes: [{
-                  ticks: {
-                    beginAtZero: true
-                  }
-                }]
-              }
-            }
-          });
-        };
-
-
-        
-toggleChartTypeBtn.addEventListener("click", function() {
-  if (myChart.config.type === "bar") {
-   myChart.config.type = "line";
-    } else {
-  myChart.config.type = "bar";
-         }
-    myChart.update();
+  const countryContainer = document.querySelector(".country-container");
+  countryContainer.addEventListener("click", (e) => {
+    if (e.target.tagName !== "BUTTON") return;
+    e.stopPropagation();
+    getCityByCountries(e.target.dataset.countryName);
   });
+};
 
+toggleChartTypeBtn.addEventListener("click", function () {
+  if (myChart.config.type === "bar") {
+    myChart.config.type = "line";
+  } else {
+    myChart.config.type = "bar";
+  }
+  myChart.update();
+});
 // ---------------------> second API fetching each country <-----------------
 // https://documenter.getpostman.com/view/1134062/T1LJjU52/
 
 let citiesNames = [];
 let citiesPopulations = [];
-async function getCityByCountries(country) {
+let populationByYear = [];
+
+async function getCityByCountries(countryName) {
+  spinner.style.display = "block";
   try {
-    const response = await fetch("https://countriesnow.space/api/v0.1/countries/population/cities/filter",
+    const response = await fetch(
+      "https://countriesnow.space/api/v0.1/countries/population/cities/filter",
       {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ "country": `${country}` }),
+        body: JSON.stringify({ country: `${countryName}` }),
       }
     );
-  
-    let data = await response.json();
+    if (!response.ok) throw Error("ERROR!!");
+
+    let data = (await response.json()).data;
+    console.log(data);
+
     citiesNames = [];
     citiesPopulations = [];
-    if (!response.ok) {
-      myChart.destroy();
-      throw Error("ERROR!!");
-    }
+    //populationByYear = [];
+
     data.forEach((city) => {
-        citiesNames.push(city.name);
-        citiesPopulations.push(city.population);
-      });
-      initChart(citiesNames, citiesPopulations);
-    } catch (error) {
-        console.log("error");
-    }
+      citiesNames.push(city.city);
+      citiesPopulations.push(city.populationCounts[0].value);
+      // city.populationCounts.forEach((population) => {
+      //populationByYear.push(city.populationCounts[0].year);
+      //});
+    });
+
+    myChart = initChart(citiesNames.slice(-15), citiesPopulations.slice(-15));
+    spinner.style.display = "none";
+  } catch (error) {
+    console.log(error);
+    spinner.style.display = "none";
+  }
 }
+

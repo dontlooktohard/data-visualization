@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
-    <script src="./spinner.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <script src="./js/API.js" defer></script>
+    <script src="./js/mychart.js"></script>
+    <script src="./js/API.js" async defer></script>
     <script src="https://kit.fontawesome.com/ef3021087b.js" crossorigin="anonymous"></script>
     
     <title>World Population </title>
@@ -23,13 +23,7 @@
             <canvas class="myChart"></canvas>
             <div class="spinner"></div>
         </div>
-        <div class="continent">
-            <button id="africa"><i class="fa-solid fa-earth-africa fa-4x"></i>Africa</button>
-            <button id="america"><i class="fa-solid fa-earth-americas fa-4x"></i>America</button>
-            <button id="asia"><i class="fa-solid fa-earth-asia fa-4x "></i>Asia</button>
-            <button id="europe"><i class="fa-solid fa-earth-europe fa-4x"></i>Europe</button>
-            <button id="oceania"><i class="fa-solid fa-earth-oceania fa-4x"></i>Oceania</button>
-        </div>
+        <div class="continent"></div>
         <div class="country"></div>
     </div>
 
