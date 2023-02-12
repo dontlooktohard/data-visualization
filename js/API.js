@@ -11,23 +11,38 @@ const chartBox = document.querySelector("#chartBox");
 const spinner = document.querySelector(".spinner");
 
 africaBtn.addEventListener("click", function() {
-    getCountriesByRegion("africa");
+    africaBtn.disabled = true;
+    getCountriesByRegion("africa").finally(function() {
+        africaBtn.disabled = false;
+    });
 });
 
 americaBtn.addEventListener("click", function() {
-    getCountriesByRegion("americas");
+    americaBtn.disabled = true;
+    getCountriesByRegion("americas").finally(function() {
+        americaBtn.disabled = false;
+    });
 });
 
 asiaBtn.addEventListener("click", function() {
-    getCountriesByRegion("asia");
+    asiaBtn.disabled = true;
+    getCountriesByRegion("asia").finally(function() {
+        asiaBtn.disabled = false;
+    });
 });
 
 europeBtn.addEventListener("click", function() {
-    getCountriesByRegion("europe");        
+    europeBtn.disabled = true;
+    getCountriesByRegion("europe").finally(function() {
+        europeBtn.disabled = false;
+    });
 });
 
 oceaniaBtn.addEventListener("click", function() {
-    getCountriesByRegion("oceania");
+    oceaniaBtn.disabled = true;
+    getCountriesByRegion("oceania").finally(function() {
+        oceaniaBtn.disabled = false;
+    });
 });
 
 spinner.style.display = "none";
@@ -56,7 +71,7 @@ async function getCountriesByRegion(region) {
         console.log(countryNames); 
         console.log(countryPopulations);
         createCountryBtn(data);
-        initChart( countryNames , countryPopulations);
+        initChart(countryNames, countryPopulations);
         
         spinner.style.display = "none";
     } catch (error) {
@@ -88,13 +103,13 @@ const addEventListenersToCountryBtn = () => {
     const countryBtn = document.querySelectorAll(".country-btn");
     countryBtn.forEach((btn, index) => {
         btn.addEventListener("click", () => {
-            drawChart(countryNames[index], countryPopulations[index]);
+            initChart(countryNames[index], countryPopulations[index]);
         });
     });
 }
 
 // ----------->chart function of create and destroy  <--------------------------------------------
-document.addEventListener("DOMContentLoaded", function(event) {
+
     function initChart(countryNames, countryPopulations) {
 
         if (myChart !== null) {
@@ -123,8 +138,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
               }
             }
           });
-        }
-  });
+        };
+
 
 
 
@@ -157,31 +172,8 @@ async function getCityByCountries(country) {
         citiesNames.push(city.name);
         citiesPopulations.push(city.population);
       });
-      initChart(citiesNames , citiesPopulations);
+      initChart(citiesNames, citiesPopulations);
     } catch (error) {
         console.log("error");
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
