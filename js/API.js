@@ -60,7 +60,7 @@ async function getCountriesByRegion(region) {
         
         spinner.style.display = "none";
     } catch (error) {
-        console.error(`An error occurred while fetching the data: ${error}`);
+        console.log(`An error occurred while fetching the data: ${error}`);
         spinner.style.display = "none";
     }
 }
