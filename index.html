@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./spinner.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="./js/events.js"></script>
+    <script src="./js/API.js"></script>
     
-    <title>Document</title>
+    <title>World Population </title>
 </head>
 <body>
     <div id="container">
@@ -18,7 +19,7 @@
             <div class="title"></div>
         </header>
         <div id="chartBox">
-            <canvas class="myChart"></canvas>
+            <div class="divChart"><canvas class="myChart"></canvas></div>
             <div class="spiner"></div>
         </div>
         <div class="continent">
@@ -28,6 +29,7 @@
             <button class="europe">Europe</button>
             <button class="oceania">Oceania</button>
         </div>
+        <div class="country"></div>
     </div>
 </body>
 </html> 
