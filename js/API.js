@@ -2,13 +2,35 @@
 const setContinent = document.querySelector('.continent');
 const setCity = document.querySelector('.city');
 const ctx = document.getElementById("myChart")
-const africaBtn = document.querySelector('.africa')
-const americaBtn = document.querySelector('.america')
-const asiaBtn = document.querySelector('.asia')
-const europeBtn = document.querySelector('.europe')
-const oceaniaBtn = document.querySelector('.oceania')
+const africaBtn = document.querySelector('#africa')
+const americaBtn = document.querySelector('#america')
+const asiaBtn = document.querySelector('#asia')
+const europeBtn = document.querySelector('#europe')
+const oceaniaBtn = document.querySelector('#oceania')
 const chartBox = document.querySelector("#chartBox");
 const spinner = document.querySelector(".spinner");
+
+africaBtn.addEventListener("click", function() {
+    getCountriesByRegion("africa");
+});
+
+americaBtn.addEventListener("click", function() {
+    getCountriesByRegion("americas");
+});
+
+asiaBtn.addEventListener("click", function() {
+    getCountriesByRegion("asia");
+});
+
+europeBtn.addEventListener("click", function() {
+    getCountriesByRegion("europe");        
+});
+
+oceaniaBtn.addEventListener("click", function() {
+    getCountriesByRegion("oceania");
+});
+
+spinner.style.display = "none";
 
 // ------->API fetch the populations and names of regions<--
 
@@ -38,7 +60,7 @@ async function getCountriesByRegion(region) {
         
         spinner.style.display = "none";
     } catch (error) {
-        console.error(`An error occurred while fetching the data: ${error}`);   ;
+        console.error(`An error occurred while fetching the data: ${error}`);
         spinner.style.display = "none";
     }
 }
@@ -88,7 +110,7 @@ function initChart(countryNames, countryPopulations) {
           }]
         },
         options: {
-          scales: {
+          scales: {           
             yAxes: [{
               ticks: {
                 beginAtZero: true

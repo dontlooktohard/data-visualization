@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="./css/style.css">
     <script src="./spinner.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <script src="./js/events.js"></script>
-    <script src="./js/API.js"></script>
+    <script src="./js/API.js" defer></script>
     
     <title>World Population </title>
 </head>
@@ -20,14 +19,14 @@
         </header>
         <div id="chartBox">
             <div class="divChart"><canvas class="myChart"></canvas></div>
-            <div class="spiner"></div>
+            <div class="spinner"></div>
         </div>
         <div class="continent">
-            <button class="africa">Africa</button>
-            <button class="america">America</button>
-            <button class="asia">Asia</button>
-            <button class="europe">Europe</button>
-            <button class="oceania">Oceania</button>
+            <button id="africa">Africa</button>
+            <button id="america">America</button>
+            <button id="asia">Asia</button>
+            <button id="europe">Europe</button>
+            <button id="oceania">Oceania</button>
         </div>
         <div class="country"></div>
     </div>
