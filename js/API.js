@@ -94,35 +94,38 @@ const addEventListenersToCountryBtn = () => {
 }
 
 // ----------->chart function of create and destroy  <--------------------------------------------
-function initChart(countryNames, countryPopulations) {
+document.addEventListener("DOMContentLoaded", function(event) {
+    function initChart(countryNames, countryPopulations) {
 
-    if (myChart !== null) {
-        myChart.destroy();
-      }
-
-      myChart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: countryNames,
-          datasets: [{
-            label: "Population",
-            data: countryPopulations,
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
-            borderColor: "rgba(255, 99, 132, 1)",
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {           
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
+        if (myChart !== null) {
+            myChart.destroy();
           }
+    
+          myChart = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: countryNames,
+              datasets: [{
+                label: "Population",
+                data: countryPopulations,
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {           
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              }
+            }
+          });
         }
-      });
-    }
+  });
+
 
 
 // ---------------------> second API fetching each country <-----------------
