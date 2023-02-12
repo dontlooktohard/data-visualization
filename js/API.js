@@ -11,22 +11,27 @@ const chartBox = document.querySelector("#chartBox");
 const spinner = document.querySelector(".spinner");
 
 africaBtn.addEventListener("click", function() {
+    clearChart();
     getCountriesByRegion("africa");
 });
 
 americaBtn.addEventListener("click", function() {
+    clearChart();
     getCountriesByRegion("americas");
 });
 
 asiaBtn.addEventListener("click", function() {
+    clearChart();
     getCountriesByRegion("asia");
 });
 
 europeBtn.addEventListener("click", function() {
+    clearChart();
     getCountriesByRegion("europe");        
 });
 
 oceaniaBtn.addEventListener("click", function() {
+    clearChart();
     getCountriesByRegion("oceania");
 });
 
@@ -66,6 +71,9 @@ async function getCountriesByRegion(region) {
 }
 
 
+const countryButtons = document.createElement('div');
+countryButtons.classList.add("country-btn");
+chartBox.append(countryButtons);
 
 // ------------------> create btn and attach them to EventListener <------------------------
 
