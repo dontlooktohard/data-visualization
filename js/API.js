@@ -9,6 +9,7 @@ const europeBtn = document.querySelector('#europe')
 const oceaniaBtn = document.querySelector('#oceania')
 const chartBox = document.querySelector("#chartBox");
 const spinner = document.querySelector(".spinner");
+const toggleChartTypeBtn = document.getElementById("toggle-chart-type");
 
 africaBtn.addEventListener("click", function() {
     africaBtn.disabled = true;
@@ -141,7 +142,15 @@ const addEventListenersToCountryBtn = () => {
         };
 
 
-
+        
+toggleChartTypeBtn.addEventListener("click", function() {
+  if (myChart.config.type === "bar") {
+   myChart.config.type = "line";
+    } else {
+  myChart.config.type = "bar";
+         }
+    myChart.update();
+  });
 
 // ---------------------> second API fetching each country <-----------------
 // https://documenter.getpostman.com/view/1134062/T1LJjU52/
